@@ -138,32 +138,32 @@ Logistic regression model performance (test set):
 
 ### Prerequisites
 ```bash
-pip install -r requirements.txt
+requirements.txt
 ```
 
 ### Running the Analysis
 
 **Step 1**: Data cleaning and integration
 ```bash
-python 01_data_cleaning.py
+01_data_cleaning.py
 ```
 Outputs: `cleaned_student_data.csv`, `student_summary.csv`
 
 **Step 2**: KPI analysis and risk scoring
 ```bash
-python 02_kpi_analysis.py
+02_kpi_analysis.py
 ```
 Outputs: `student_annual_metrics.csv`, `kpi_analysis_reports.xlsx`
 
 **Step 3**: Regression analysis
 ```bash
-python 03_regression_analysis.py
+03_regression_analysis.py
 ```
 Outputs: Regression visualizations and coefficient comparison table
 
 **Step 4**: Predictive modeling
 ```bash
-python 04_predictive_model.py
+04_predictive_model.py
 ```
 Outputs: Model performance metrics and diagnostic plots
 

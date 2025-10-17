@@ -70,7 +70,7 @@ Risk classification:
 
 Multiple linear regression analysis (R² = 0.92) identified the following factors as significant predictors of final GPA:
 
-![Final GPA Drivers](outputs/regression_final_gpa.png)
+![Final GPA Drivers](regression_final_gpa.png)
 
 **Key Finding**: Assessment scores are the dominant predictor (β = 0.85), explaining the majority of variance in final GPA. Homework and classwork show moderate importance (β = 0.32 and 0.28 respectively), while attendance demonstrates minimal impact (β = 0.08), likely due to the high baseline attendance rate (95% average).
 
@@ -96,9 +96,9 @@ Multiple linear regression analysis (R² = 0.92) identified the following factor
 
 Logistic regression model performance (test set):
 
-![ROC Curve](outputs/roc_curve.png)
+![ROC Curve](roc_curve.png)
 
-![Feature Importance](outputs/feature_importance.png)
+![Feature Importance](feature_importance.png)
 
 **Model Performance**:
 - Accuracy: 85.2%

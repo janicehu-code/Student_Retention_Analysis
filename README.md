@@ -1,5 +1,6 @@
 # Student Performance Analysis and Retention Risk Modeling
-This quantitative project analyzes academic and behavioral data from 347 middle school students to identify factors driving academic success and predict students at risk of withdrawal.
+
+A quantitative analysis of middle school student performance data to identify at-risk students and understand the key drivers of academic outcomes.
 
 ---
 
@@ -52,8 +53,6 @@ Risk classification:
 2. T1→T2 model: Predicting Term 1 to Term 2 GPA change using Term 1 metrics
 3. T2→T3 model: Predicting Term 2 to Term 3 GPA change using Term 2 metrics
 
-**Key finding**: Factor importance shifts across time periods—homework becomes increasingly important in later terms, while assessment scores remain consistently significant.
-
 ### 4. Withdrawal Prediction Model
 **File**: `04_predictive_model.py`
 
@@ -65,20 +64,24 @@ Risk classification:
 
 ---
 
-## Results
+## Key Results
 
-### Factor Analysis (Standardized Coefficients)
+### 1. Performance Drivers
 
-**Final GPA Model (R² = 0.92)**:
-- Assessment scores: β = 0.85 (strongest predictor)
+Multiple linear regression analysis (R² = 0.92) identified the following factors as significant predictors of final GPA:
+
+![Final GPA Drivers](outputs/regression_final_gpa.png)
+
+**Key Finding**: Assessment scores are the dominant predictor (β = 0.85), explaining the majority of variance in final GPA. Homework and classwork show moderate importance (β = 0.32 and 0.28 respectively), while attendance demonstrates minimal impact (β = 0.08), likely due to the high baseline attendance rate (95% average).
+
+**Standardized Coefficients**:
+- Assessment scores: β = 0.85
 - Homework average: β = 0.32
 - Classwork average: β = 0.28
 - Behavior points: β = 0.15
 - Attendance rate: β = 0.08
 
-**Interpretation**: Assessment performance explains the majority of variance in final GPA. Attendance shows minimal impact, likely due to high baseline (95% average attendance rate).
-
-### Risk Distribution
+### 2. Risk Distribution
 
 | Risk Level | Count | Percentage | Avg GPA | Withdrawal Rate |
 |------------|-------|------------|---------|-----------------|
@@ -87,19 +90,28 @@ Risk classification:
 | Level 2    | 29    | 8.4%       | 74.5    | 10.3%           |
 | Level 3    | 6     | 1.7%       | 71.0    | 0.0%            |
 
-### Predictive Model Performance
+**Finding**: The risk scoring system effectively stratifies students, with Level 2-3 students showing measurably lower GPAs and higher withdrawal rates. Approximately 10% of students are identified as requiring heightened monitoring or intervention.
 
-- **Accuracy**: 85.2%
-- **ROC-AUC**: 0.74
-- **Precision (Withdrawn)**: 0.25
-- **Recall (Withdrawn)**: 0.50
+### 3. Withdrawal Prediction Model
 
-**Note**: Low precision reflects severe class imbalance (5.8% withdrawal rate). The model correctly identifies 50% of withdrawn students while maintaining 85% overall accuracy.
+Logistic regression model performance (test set):
 
-**Top predictors** (by absolute coefficient):
-1. Risk score (β = +2.97)
-2. GPA (β = -2.15)
-3. Attendance rate (β = -1.08)
+![ROC Curve](outputs/roc_curve.png)
+
+![Feature Importance](outputs/feature_importance.png)
+
+**Model Performance**:
+- Accuracy: 85.2%
+- ROC-AUC: 0.74
+- Precision (Withdrawn): 0.25
+- Recall (Withdrawn): 0.50
+
+**Key Finding**: The composite risk score is the strongest predictor of withdrawal (coefficient = +2.97), validating the multi-factor assessment framework. The model correctly identifies 50% of withdrawn students while maintaining 85% overall accuracy. Low precision reflects severe class imbalance (5.8% withdrawal rate), which is a known limitation.
+
+**Top Predictors** (by absolute coefficient):
+1. Risk score: β = +2.97
+2. Core GPA: β = -2.15
+3. Attendance rate: β = -1.08
 
 ---
 
@@ -111,54 +123,78 @@ Risk classification:
 - Data manipulation: pandas, numpy
 - Statistical modeling: scikit-learn (LinearRegression, LogisticRegression, StandardScaler)
 - Visualization: matplotlib, seaborn
+- Data export: openpyxl
 
 **Environment**: Google Colab
 
-**Key techniques**:
+**Key Techniques**:
 - Feature standardization for coefficient comparison
 - Stratified sampling to handle class imbalance
 - Cross-sectional and longitudinal analysis to capture time-varying effects
 
 ---
 
-## Limitations and Future Improvements
+## Installation and Usage
 
-**Current limitations**:
-- Small sample size limits generalizability
-- Class imbalance reduces precision for minority class (withdrawn students)
-- Limited feature set—lacks data on family background, prior academic history, or external factors
-- Static model does not account for within-year changes in student status
+### Prerequisites
+```bash
+pip install -r requirements.txt
+```
 
-**Potential enhancements**:
-- Collect additional predictive features (parent engagement, disciplinary history, prior school records)
-- Apply resampling techniques (SMOTE) or ensemble methods to address class imbalance
-- Develop time-series or survival analysis models for dynamic risk assessment
-- Incorporate interaction terms to capture non-linear relationships
+### Running the Analysis
+
+**Step 1**: Data cleaning and integration
+```bash
+python 01_data_cleaning.py
+```
+Outputs: `cleaned_student_data.csv`, `student_summary.csv`
+
+**Step 2**: KPI analysis and risk scoring
+```bash
+python 02_kpi_analysis.py
+```
+Outputs: `student_annual_metrics.csv`, `kpi_analysis_reports.xlsx`
+
+**Step 3**: Regression analysis
+```bash
+python 03_regression_analysis.py
+```
+Outputs: Regression visualizations and coefficient comparison table
+
+**Step 4**: Predictive modeling
+```bash
+python 04_predictive_model.py
+```
+Outputs: Model performance metrics and diagnostic plots
 
 ---
 
-## Files and Outputs
+## Limitations and Future Improvements
 
-**Code**:
-- `01_data_cleaning.py` - Data integration and preprocessing
-- `02_kpi_analysis.py` - Risk scoring and descriptive statistics
-- `03_regression_analysis.py` - Factor analysis and regression modeling
-- `04_predictive_model.py` - Logistic regression for withdrawal prediction
+**Current Limitations**:
+- Small sample size (N=347) limits generalizability
+- Class imbalance (5.8% withdrawal rate) reduces precision for minority class
+- Limited feature set—lacks data on family background, prior academic history, or socioeconomic factors
+- Static model does not account for within-year changes in student status
 
-**Outputs**:
-- `student_annual_metrics.csv` - Student-level aggregated data
-- `kpi_analysis_reports.xlsx` - Risk distribution and subgroup comparisons
-- `regression_comparison.csv` - Coefficient comparison across models
-- `feature_importance.png`, `roc_curve.png`, `confusion_matrix.png` - Model diagnostics
+**Potential Enhancements**:
+- Collect additional predictive features (parent engagement, disciplinary details, prior school records)
+- Apply resampling techniques (SMOTE) or ensemble methods (Random Forest, XGBoost) to address class imbalance
+- Develop time-series or survival analysis models for dynamic risk assessment throughout the academic year
+- Incorporate interaction terms to capture non-linear relationships between factors
 
 ---
 
 ## Conclusion
 
-This project demonstrates the application of statistical methods to education data for early risk identification. The analysis reveals that academic performance metrics—particularly assessment scores—are the most reliable indicators of student outcomes, while behavioral and attendance factors play supporting roles. The predictive model achieves moderate discrimination (AUC = 0.74), though precision remains limited by class imbalance.
+This project demonstrates the application of statistical methods to education data for early risk identification. The analysis reveals that academic performance metrics—particularly assessment scores—are the most reliable indicators of student outcomes, while behavioral and attendance factors play supporting roles. The risk scoring framework provides a systematic approach to identifying students who may benefit from early intervention, with the predictive model achieving moderate discrimination (AUC = 0.74) despite challenges from class imbalance.
 
-The framework provides a systematic, data-driven approach to identifying students who may benefit from early intervention, enabling more efficient resource allocation in educational settings.
+The framework enables more efficient resource allocation by identifying approximately 10% of students as high-priority for intervention support, providing a data-driven foundation for educational decision-making.
 
 ---
 
-**Note**: All data has been anonymized to protect student privacy. This project was conducted for educational purposes as part of coursework/independent study.
+## Note
+
+All data has been anonymized to protect student privacy. This project was conducted for educational purposes as part of independent study in applied statistics and data analysis.
+
+Raw data files are not included in this repository due to privacy considerations.
